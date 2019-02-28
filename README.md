@@ -10,7 +10,7 @@ docker run -v "$PWD"/Data-structure:/home --rm -ti [container name]
 ```
 $cd home // directory change
 
-$gcc [filename]
+$gcc [filename] //compile 
 
 $./a.out
 ```
