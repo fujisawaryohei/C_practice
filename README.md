@@ -4,7 +4,7 @@ docker build -t [tag name] [buildcontext]
 ```
 ## Run container
 ```
-docker run -v "$PWD"/Data-structure:/home --rm -ti [container name]
+docker run -v "$PWD"/C:/home --rm -ti [container name]
 ```
 ## how to use this Repo
 ```
