@@ -35,6 +35,15 @@
 // }
 
 void swap(int *a, int *b);
+
+struct person {
+  char *name;
+  char sex;
+  int age;
+  char *add;
+  char *job;
+};
+
 int main(void){
   int a = 1;
   int b = 2;
