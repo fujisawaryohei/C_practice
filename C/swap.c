@@ -52,6 +52,7 @@ int main(void){
   swap(&a,&b);
   printf("a:%d, b:%d\nt",a,b);
   printf("a:%p,b:%p\n",&a,&b);
+  printf("%s",fujisawa.name);
   return 0;
 }
 // void f(long *a){

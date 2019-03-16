@@ -14,19 +14,20 @@ int main(){
   struct sockaddr_in client;
   int len;
   int sock;
-  /* ファイルディスクリプタが返る */
-  sock0 = socket(AF_INET,SOCK_STREAM,0);
+  /* ファイルディスクリプタ値が返る */
+  sock0 = socket(AF_INET, SOCK_STREAM, 0);
   addr.sin_family = AF_INET;
   addr.sin_port = htons(12345);
   addr.sin_addr.s_addr = INADDR_ANY;
   /* 設定終了 */
   /* ソケットへ命名 */
-  bind(sock0,(struct sockaddr*)&addr,sizeof(addr));
+  bind(sock0, (struct sockaddr*)&addr, sizeof(addr));
   /* 接続を待ち受ける */
   listen(sock0,5);
   len = sizeof(client);
-  sock = accept(sock0,(struct sockaddr*)&client,&len);
+  sock = accept(sock0, (struct sockaddr*)&client, &len);
   /* 5文字送信 */
+  /* クライアントからきたsocketの情報を書き込む */
   write(sock,"Hello",5);
   /* TCPセッションの終了 */
   close(sock);
