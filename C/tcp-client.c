@@ -17,7 +17,7 @@ int main(){
   server.sin_port = htons(12345);//ポート番号
   /* localhostは127.0.0.1 */
   /* inet_ptonはIPアドレス形式のテキストをバイナリ変換 */
-  inet_pton(AF_INET, "172.20.10.2", &server.sin_addr.s_addr);
+  inet_pton(AF_INET, "ip adress", &server.sin_addr.s_addr);
   connect(sock, (struct sockaddr *)&server ,sizeof(server));
   /* サーバーからデータを受信 */
   /* buf→メモリのポインタ */
