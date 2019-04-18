@@ -9,13 +9,16 @@
 int main(){
   /* ソケット実装 */
   int sock0;
-  /* ソケットの設定情報を保持させる構造体 */
+  /* 接続先のIPアドレスや、ポート番号を指定できる構造体で,bindシステムコールでsockaddr_in構造体のデータと関連づけられる。 */
   struct sockaddr_in addr;
   struct sockaddr_in client;
   int len;
   int sock;
   /* ファイルディスクリプタ値が返る */
+  /* socket(,protocol) protocol
+  -> sudo cat ./etc/protocols */
   sock0 = socket(AF_INET, SOCK_STREAM, 0);
+  printf("%i\n",sock0);
   addr.sin_family = AF_INET;
   addr.sin_port = htons(12345);
   addr.sin_addr.s_addr = INADDR_ANY;
