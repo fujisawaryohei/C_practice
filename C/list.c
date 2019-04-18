@@ -2,20 +2,24 @@
 #include <stdio.h>
 #define MAXSIZE 30
 
-int list[MAXSIZE];
-int tail;
+typedef int LIST_ITEM;
+typedef int LIST_INDEX;
+#define LIST_TAIL -1
+
+LIST_ITEM list[MAXSIZE];
+LIST_INDEX tail;
 
 void Init (void)
 {
   tail = 0;
 }
 
-int Top (void)
+LIST_INDEX Top (void)
 {
   return 0;
 }
 
-int Next(int index)
+LIST_INDEX Next(LIST_INDEX index)
 {
   if(index < tail-1) {
     return index+1;
@@ -29,7 +33,7 @@ int Count(void)
   return tail;
 }
 
-int Item(int index)
+LIST_ITEM Item(LIST_INDEX index)
 {
   if((index >= 0) && (index < tail)){
     return list[index];
@@ -38,7 +42,7 @@ int Item(int index)
   }
 }
 
-void Add(int value)
+void Add(LIST_ITEM value)
 {
   if(tail < MAXSIZE) {
     list[tail] = value;
@@ -46,7 +50,7 @@ void Add(int value)
   }
 }
 
-void Insert(int index,int value)
+void Insert(LIST_INDEX index,LIST_ITEM value)
 {
   if((index >= 0) && (index < tail) && (tail < MAXSIZE)){
     int i;
@@ -58,7 +62,7 @@ void Insert(int index,int value)
   }
 }
 
-void Delete(int index)
+void Delete(LIST_INDEX index)
 {
   if((index >= 0) && (index < tail)){
     int i;
@@ -78,7 +82,7 @@ int main(void){
   Delete(Top());
   Insert(Top(),4);
   printf("count = %d\n", Count());
-  for(p=Top(); p!=-1; p=Next(p)) {
+  for(p=Top(); p!=LIST_TAIL; p=Next(p)) {
     printf(" %d",Item(p));
   }
   printf("\n");
