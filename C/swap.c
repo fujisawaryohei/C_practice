@@ -45,15 +45,23 @@ struct person {
 };
 
 int main(void){
-  int a = 1;
-  int b = 2;
-  printf("a:%d,a:%d\n",a,b);
-  printf("a:%p,b:%p\n",&a,&b);
-  swap(&a,&b);
-  printf("a:%d, b:%d\nt",a,b);
-  printf("a:%p,b:%p\n",&a,&b);
-  printf("%s",fujisawa.name);
-  return 0;
+  // int a = 1;
+  // int b = 2;
+  // printf("a:%d,a:%d\n",a,b);
+  // printf("a:%p,b:%p\n",&a,&b);
+  // swap(&a,&b);
+  // printf("a:%d, b:%d\nt",a,b);
+  // printf("a:%p,b:%p\n",&a,&b);
+  // printf("%s",fujisawa.name);
+  // return 0;
+  int* a;
+  int* b;
+  int c = 1;
+  printf("c:%p\n",&c);
+  a = &c;
+  printf("a:%p,b:%p,c:%d\n",a,b,c);
+  printf("a:%d",*a);
+  //ポインタ変数を通常変数として扱い方場合 →*a
 }
 // void f(long *a){
 //   *a += 100;
@@ -72,3 +80,4 @@ void swap(int *a, int *b){
   *a = *b;
   *b = *t;
 }
+
