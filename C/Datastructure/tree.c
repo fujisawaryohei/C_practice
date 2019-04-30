@@ -81,7 +81,8 @@ TREE_ITEM searchNode(TREE_KEY key)
   }
 }
 
-void deleteNode(TREE_KEY key){
+void deleteNode(TREE_KEY key)
+{
   struct NODE** pos = &root;
   struct NODE* delete_node;
   while(*pos != NULL && (*pos) -> key != key){
@@ -104,33 +105,44 @@ void deleteNode(TREE_KEY key){
     if((*pos) -> left == NULL){
       *pos = (*pos) -> right;
     } else {
-      struct NODE** largemin;
-      while((*largemin) -> left != NULL){
+      struct NODE** largemin = &((*pos) -> right);
+      while((*largemin) -> left == NULL){
         largemin = &((*largemin) -> left);
       }
       *pos = *largemin;
-      *largemin = (*largemin) -> left;
+      *largemin = (*largemin) -> right;
       (*pos) -> left = delete_node -> left;
       (*pos) -> right = delete_node -> right;
+
     }
   }
   free(delete_node);
 }
 
+void Output(struct NODE *pos)
+{
+  if(pos -> left != NULL){
+    Output(pos -> left);
+  }
+  printf("%d: %.2f¥n", pos -> key, pos -> data);
+  if(pos -> right != NULL){
+    Output(pos -> right);
+  }
+}
+
 int main(void)
 {
-  int i;
-  TREE_ITEM found;
   Init();
-  addNode(4,14.4);
-  addNode(7,17.7);
-  addNode(6,16.6);
-  addNode(2,12.2);
-  addNode(10,20.1);
-  for(i=1; i<4; i++){
-    printf("SearchNode(%d) = ", i);
-    found = searchNode(i);
-    printf("%.2f¥n",found);
-  }
+  addNode(4, 14.4);
+  addNode(7, 17.7);
+  addNode(6, 16.6);
+  addNode(2, 12.2);
+  addNode(10, 20.1);
+  Output(root);
+  Output(root);
+  printf("Delete 7¥n");
+  deleteNode(7);
+  Output(root);
+
   return 0;
 }
