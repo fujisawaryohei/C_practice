@@ -10,7 +10,10 @@ docker run -v "$PWD"/C:/home --rm -ti [container name]
 ```
 $cd home // directory change
 
-$gcc [filename] //compile 
+$gcc [filename] //compile
 
 $./a.out
 ```
+## how to implement test Code in docker
+chmod a+x test.sh
+
