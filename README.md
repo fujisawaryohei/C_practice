@@ -14,8 +14,11 @@ $gcc [filename] //compile
 
 $./a.out
 ```
-## how to implement test Code in docker
 ```
-chmod a+x test.sh
+make //コンパイル
+
+make test //テストの実行
+
+make clean //一時ファイルの削除
 ```
 
