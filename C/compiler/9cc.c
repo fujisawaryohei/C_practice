@@ -22,14 +22,20 @@ struct Token {
   char *str;
 };
 
+char *user_input;
 //現在着目しているトークン
 Token *token;
 
 //エラーを報告するための関数
 //printfと同じ引数を取る
-void error(char *fmt, ...) {
+void error_at(char *loc, char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
+
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
+  fprintf(stderr, "%*s", pos, ""); // print pos spaces.
+  fprintf(stderr, "^ ");
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
   exit(1);
@@ -48,14 +54,14 @@ bool consume(char op){
 
 void expect(char op){
   if(token->kind != TK_RESERVED || token->str[0] != op)
-  error("expected '%c'", op);
-  token = token->next;
+  error_at(token -> str, "expected '%c'", op);
+  token = token -> next;
 }
 
 int expect_number(){
   if(token->kind != TK_NUM){
-    error("expected a number");
-  }else{
+    error_at(token -> str, "expected a number");
+  } else {
     int val = token -> val;
     token = token -> next;
     return val;
@@ -92,11 +98,11 @@ Token *tokenize(char *p) {
 //数値トークンとしてenumで定義した種別をメモリで割り当てる
     if(isdigit(*p)){
       cur = new_token(TK_NUM, cur, p);
-      cur->val = strtol(p, &p, 10);
+      cur -> val = strtol(p, &p, 10);
       continue;
     }
 //それ以外の記号トークンは予測できないものとしてエラーを返す
-    error("invalid token");
+    error_at(p, "invalid token");
   }
 
   new_token(TK_EOF, cur, p);
@@ -105,11 +111,12 @@ Token *tokenize(char *p) {
 
 int main(int argc, char **argv){
   if(argc != 2) {
-    error("%s: invalid number of argument", argv[0]);
+    error_at("%s: invalid number of argument", argv[0]);
     return 1;
   }
 
-  token = tokenize(argv[1]);
+  user_input = argv[1];
+  token = tokenize(user_input);
 
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
@@ -120,9 +127,10 @@ int main(int argc, char **argv){
     if(consume('+')) {
       printf("  add rax, %d\n", expect_number());
       continue;
+    } else {
+      expect('-');
+      printf("  sub rax, %d\n", expect_number());
     }
-    expect('-');
-    printf("  sub rax, %d\n", expect_number());
   }
 
   printf("  ret\n");

@@ -7,5 +7,7 @@ test:	9cc
 
 clean:
 				rm -f 9cc *.o *~ tmp*
+				rm -f test *.o *~ tmp*
+				rm -f test.s
 
 .PHONY:	test clean
