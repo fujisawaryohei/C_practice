@@ -7,8 +7,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-char *user_input;
-
 typedef enum {
   TK_RESERVED, //記号
   TK_NUM,  //整数トークン
@@ -16,7 +14,6 @@ typedef enum {
 } TokenKind;
 
 typedef struct Token Token;
-
 //トークン型
 struct Token {
   TokenKind kind;
@@ -30,15 +27,10 @@ Token *token;
 
 //エラーを報告するための関数
 //printfと同じ引数を取る
-void error(char *loc, char *fmt, ...) {
+void error(char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-
-  int pos = loc - user_input;
-  fprintf(stderr, "%s\n", user_input);
-  fprintf(stderr, "%s", pos, "");
-  fprintf(stderr, "^ ");
-  vprintf(stderr, fmt, ap);
+  vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
   exit(1);
 }
@@ -46,31 +38,35 @@ void error(char *loc, char *fmt, ...) {
 //次のトークンが期待している記号のときには、トークンを一つ読み進めて
 //真を返す。それ以外の場合には偽を返す。
 bool consume(char op){
-  if(token->kind == TK_RESERVED || token->str[0] != op)
+  if(token->kind != TK_RESERVED || token->str[0] != op) {
     return false;
-  token = token->next;
-  return true;
+  } else {
+    token = token -> next;
+    return true;
+  }
 }
 
 void expect(char op){
-  if(token->kind != TK_RESERVED || token->str[0])
-  error_at(token->str, "expected '%c'", op);
+  if(token->kind != TK_RESERVED || token->str[0] != op)
+  error("expected '%c'", op);
   token = token->next;
 }
 
 int expect_number(){
-  if(token->kind != TK_NUM)
-    error_at(token->str, "expected a number");
-  int val = token->val;
-  token = token->next;
-  return val;
+  if(token->kind != TK_NUM){
+    error("expected a number");
+  }else{
+    int val = token -> val;
+    token = token -> next;
+    return val;
+  }
 }
 
 bool at_eof(){
   return token->kind == TK_EOF;
 }
 
-Token *new_token(Tokenkind kind, Token *cur, char *str){
+Token *new_token(TokenKind kind, Token *cur, char *str){
   Token *tok = calloc(1, sizeof(Token));
   tok -> kind = kind;
   tok -> str = str;
@@ -82,26 +78,25 @@ Token *tokenize(char *p) {
   Token head;
   head.next = NULL;
   Token *cur = &head;
-  
+
   while(*p){
-	  
     if(isspace(*p)){
       p++;
       continue;
     }
-    
+//記号トークンとしてenumで定義した種別をメモリで割り当てる
     if(*p == '+' || *p == '-'){
       cur = new_token(TK_RESERVED, cur, p++);
       continue;
     }
-
+//数値トークンとしてenumで定義した種別をメモリで割り当てる
     if(isdigit(*p)){
       cur = new_token(TK_NUM, cur, p);
       cur->val = strtol(p, &p, 10);
       continue;
     }
-    
-    error_at(p, "expected a number");
+//それ以外の記号トークンは予測できないものとしてエラーを返す
+    error("invalid token");
   }
 
   new_token(TK_EOF, cur, p);
@@ -110,17 +105,16 @@ Token *tokenize(char *p) {
 
 int main(int argc, char **argv){
   if(argc != 2) {
-    error_at("expected '%c'", op);
+    error("%s: invalid number of argument", argv[0]);
     return 1;
   }
 
-  user_input = argv[1];
-  token = tokenize(user_input);
-  
-  printf(".intel_global noprefix\n");
+  token = tokenize(argv[1]);
+
+  printf(".intel_syntax noprefix\n");
   printf(".global main\n");
   printf("main:\n");
-  printf(" mov rax, %d\n", expect_number());
+  printf("  mov rax, %d\n", expect_number());
 
   while(!at_eof()){
     if(consume('+')) {
